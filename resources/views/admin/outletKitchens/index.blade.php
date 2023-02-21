@@ -22,9 +22,7 @@
                         <th width="10">
 
                         </th>
-                        <th>
-                            {{ trans('cruds.outletKitchen.fields.id') }}
-                        </th>
+                        
                         <th>
                             {{ trans('cruds.outletKitchen.fields.lokasi') }}
                         </th>
@@ -42,9 +40,7 @@
                             <td>
 
                             </td>
-                            <td>
-                                {{ $outletKitchen->id ?? '' }}
-                            </td>
+                            
                             <td>
                                 {{ $outletKitchen->lokasi ?? '' }}
                             </td>

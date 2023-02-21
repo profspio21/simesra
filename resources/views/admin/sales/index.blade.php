@@ -11,7 +11,10 @@
 @endcan
 <div class="card">
     <div class="card-header">
-        {{ trans('cruds.sale.title_singular') }} {{ trans('global.list') }}
+        <h2>
+        {{ trans('global.list') }} {{ trans('cruds.sale.title_singular') }} 
+        {{$ok->lokasi}}
+        </h2>
     </div>
 
     <div class="card-body">
@@ -22,9 +25,7 @@
                         <th width="10">
 
                         </th>
-                        <th>
-                            {{ trans('cruds.sale.fields.id') }}
-                        </th>
+                        
                         <th>
                             {{ trans('cruds.sale.fields.product') }}
                         </th>
@@ -34,9 +35,11 @@
                         <th>
                             {{ trans('cruds.sale.fields.user') }}
                         </th>
+                        
                         <th>
-                            {{ trans('cruds.user.fields.name') }}
+                            Dibuat / Diupdate pada
                         </th>
+                        
                         <th>
                             &nbsp;
                         </th>
@@ -48,9 +51,7 @@
                             <td>
 
                             </td>
-                            <td>
-                                {{ $sale->id ?? '' }}
-                            </td>
+                            
                             <td>
                                 {{ $sale->product->name ?? '' }}
                             </td>
@@ -59,16 +60,17 @@
                             </td>
                             <td>
                                 {{ $sale->user->username ?? '' }}
-                            </td>
+                            </td>                            
                             <td>
-                                {{ $sale->user->name ?? '' }}
+                                {{ $sale->updated_at ?? '' }}
                             </td>
+                            
                             <td>
-                                @can('sale_show')
+                                {{-- @can('sale_show')
                                     <a class="btn btn-xs btn-primary" href="{{ route('admin.sales.show', $sale->id) }}">
                                         {{ trans('global.view') }}
                                     </a>
-                                @endcan
+                                @endcan --}}
 
                                 @can('sale_edit')
                                     <a class="btn btn-xs btn-info" href="{{ route('admin.sales.edit', $sale->id) }}">
@@ -137,7 +139,9 @@
     order: [[ 1, 'desc' ]],
     pageLength: 100,
   });
+  @can('import')
   let table = $('.datatable-Sale:not(.ajaxTable)').DataTable({ buttons: dtButtons })
+  @endcan
   $('a[data-toggle="tab"]').on('shown.bs.tab click', function(e){
       $($.fn.dataTable.tables(true)).DataTable()
           .columns.adjust();

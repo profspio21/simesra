@@ -39,9 +39,10 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 
     // Product
     Route::delete('products/destroy', 'ProductController@massDestroy')->name('products.massDestroy');
-    Route::resource('products', 'ProductController', ['except' => ['create', 'store']]);
+    Route::resource('products', 'ProductController');
 
     // Sales
+    Route::get('sales/list','SalesController@list')->name('sales.list');
     Route::delete('sales/destroy', 'SalesController@massDestroy')->name('sales.massDestroy');
     Route::resource('sales', 'SalesController');
 

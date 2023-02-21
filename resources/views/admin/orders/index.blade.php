@@ -22,17 +22,15 @@
                         <th width="10">
 
                         </th>
-                        <th>
-                            {{ trans('cruds.order.fields.id') }}
-                        </th>
+                        
                         <th>
                             {{ trans('cruds.order.fields.order_to') }}
                         </th>
                         <th>
-                            {{ trans('cruds.order.fields.ok') }}
+                            {{ trans('cruds.order.fields.type') }}
                         </th>
                         <th>
-                            {{ trans('cruds.order.fields.user') }}
+                            {{ trans('cruds.order.fields.ok') }}
                         </th>
                         <th>
                             {{ trans('cruds.order.fields.keterangan') }}
@@ -51,17 +49,15 @@
                             <td>
 
                             </td>
-                            <td>
-                                {{ $order->id ?? '' }}
-                            </td>
+                            
                             <td>
                                 {{ App\Models\Order::ORDER_TO_SELECT[$order->order_to] ?? '' }}
                             </td>
                             <td>
-                                {{ $order->ok->lokasi ?? '' }}
+                                {{ App\Models\Order::TYPE_SELECT[$order->type] ?? '' }}
                             </td>
                             <td>
-                                {{ $order->user->username ?? '' }}
+                                {{ $order->ok->lokasi ?? '' }}
                             </td>
                             <td>
                                 {{ $order->keterangan ?? '' }}
@@ -143,7 +139,9 @@
     order: [[ 1, 'desc' ]],
     pageLength: 100,
   });
+  @can('import')
   let table = $('.datatable-Order:not(.ajaxTable)').DataTable({ buttons: dtButtons })
+  @endcan
   $('a[data-toggle="tab"]').on('shown.bs.tab click', function(e){
       $($.fn.dataTable.tables(true)).DataTable()
           .columns.adjust();

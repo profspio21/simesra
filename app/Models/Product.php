@@ -27,7 +27,12 @@ class Product extends Model
 
     public function rms()
     {
-        return $this->belongsToMany(RmCategory::class);
+        return $this->belongsToMany(RawMaterial::class,'product_rm','rm_id','product_id');
+    }
+
+    public function sales()
+    {
+        return $this->hasMany(Sale::class);
     }
 
     protected function serializeDate(DateTimeInterface $date)

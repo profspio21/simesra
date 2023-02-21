@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('product_id')->nullable()->references('id')->on('products')->onDelete('set null');
             $table->foreignId('user_id')->nullable()->references('id')->on('users')->onDelete('set null');
+            $table->foreignId('ok_id')->nullable()->references('id')->on('outlet_kitchens')->onDelete('set null');
             $table->integer('qty');
             $table->timestamps();
         });

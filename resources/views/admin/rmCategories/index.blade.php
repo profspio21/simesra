@@ -22,9 +22,7 @@
                         <th width="10">
 
                         </th>
-                        <th>
-                            {{ trans('cruds.rmCategory.fields.id') }}
-                        </th>
+                        
                         <th>
                             {{ trans('cruds.rmCategory.fields.name') }}
                         </th>
@@ -39,18 +37,16 @@
                             <td>
 
                             </td>
-                            <td>
-                                {{ $rmCategory->id ?? '' }}
-                            </td>
+                            
                             <td>
                                 {{ $rmCategory->name ?? '' }}
                             </td>
                             <td>
-                                @can('rm_category_show')
+                                {{-- @can('rm_category_show')
                                     <a class="btn btn-xs btn-primary" href="{{ route('admin.rm-categories.show', $rmCategory->id) }}">
                                         {{ trans('global.view') }}
                                     </a>
-                                @endcan
+                                @endcan --}}
 
                                 @can('rm_category_edit')
                                     <a class="btn btn-xs btn-info" href="{{ route('admin.rm-categories.edit', $rmCategory->id) }}">

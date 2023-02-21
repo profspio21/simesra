@@ -9,6 +9,7 @@ use App\Http\Requests\UpdateOrderRequest;
 use App\Models\Order;
 use App\Models\OutletKitchen;
 use App\Models\User;
+use App\Models\RawMaterial;
 use Gate;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -30,14 +31,17 @@ class OrderController extends Controller
 
         $oks = OutletKitchen::pluck('lokasi', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        $users = User::pluck('username', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $rms = RawMaterial::with('category')->get();
 
-        return view('admin.orders.create', compact('oks', 'users'));
+        return view('admin.orders.create', compact('oks','rms'));
     }
 
     public function store(StoreOrderRequest $request)
     {
         $order = Order::create($request->all());
+        if($request->order_to == '') {
+            $order->update(['status' => 0]);
+        }
 
         return redirect()->route('admin.orders.index');
     }

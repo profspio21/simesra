@@ -10,7 +10,7 @@ class RmCategory extends Model
 {
     use HasFactory;
 
-    public $table = 'rm_categories';
+    public $table = 'raw_material_categories';
 
     protected $dates = [
         'created_at',

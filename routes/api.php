@@ -14,6 +14,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+
+Route::group(['prefix' => 'v1', 'as' => 'api.', 'namespace' => 'Api\V1\Admin', 'middleware' => ['auth:sanctum']], function () {
+    // Users
+    Route::apiResource('users', 'UsersApiController');
+
+    // Raw Material
+    Route::apiResource('raw-materials', 'RawMaterialApiController');
 });

@@ -22,9 +22,7 @@
                         <th width="10">
 
                         </th>
-                        <th>
-                            {{ trans('cruds.rawMaterial.fields.id') }}
-                        </th>
+                        
                         <th>
                             {{ trans('cruds.rawMaterial.fields.name') }}
                         </th>
@@ -33,6 +31,9 @@
                         </th>
                         <th>
                             {{ trans('cruds.rawMaterial.fields.ok') }}
+                        </th>
+                        <th>
+                            {{ trans('cruds.rawMaterial.fields.qty') }}
                         </th>
                         <th>
                             &nbsp;
@@ -45,9 +46,7 @@
                             <td>
 
                             </td>
-                            <td>
-                                {{ $rawMaterial->id ?? '' }}
-                            </td>
+                            
                             <td>
                                 {{ $rawMaterial->name ?? '' }}
                             </td>
@@ -58,11 +57,14 @@
                                 {{ $rawMaterial->ok->lokasi ?? '' }}
                             </td>
                             <td>
-                                @can('raw_material_show')
+                                {{ $rawMaterial->qty ?? '' }}
+                            </td>
+                            <td>
+                                {{-- @can('raw_material_show')
                                     <a class="btn btn-xs btn-primary" href="{{ route('admin.raw-materials.show', $rawMaterial->id) }}">
                                         {{ trans('global.view') }}
                                     </a>
-                                @endcan
+                                @endcan --}}
 
                                 @can('raw_material_edit')
                                     <a class="btn btn-xs btn-info" href="{{ route('admin.raw-materials.edit', $rawMaterial->id) }}">
@@ -131,7 +133,9 @@
     order: [[ 1, 'desc' ]],
     pageLength: 100,
   });
+  @can('import')
   let table = $('.datatable-RawMaterial:not(.ajaxTable)').DataTable({ buttons: dtButtons })
+  @endcan
   $('a[data-toggle="tab"]').on('shown.bs.tab click', function(e){
       $($.fn.dataTable.tables(true)).DataTable()
           .columns.adjust();

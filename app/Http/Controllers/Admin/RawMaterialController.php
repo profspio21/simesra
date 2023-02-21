@@ -9,6 +9,7 @@ use App\Http\Requests\UpdateRawMaterialRequest;
 use App\Models\OutletKitchen;
 use App\Models\RawMaterial;
 use App\Models\RmCategory;
+use App\Models\Order;
 use Gate;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;

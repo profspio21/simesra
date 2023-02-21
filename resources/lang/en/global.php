@@ -2,11 +2,11 @@
 
 return [
     'actions'                        => 'Actions',
-    'add'                            => 'Add',
+    'add'                            => 'Tambah',
     'allRightsReserved'              => 'All rights reserved.',
     'areYouSure'                     => 'Are you sure?',
     'clickHereToVerify'              => 'Click here to verify',
-    'create'                         => 'Create',
+    'create'                         => 'Buat',
     'dashboard'                      => 'Dashboard',
     'delete'                         => 'Delete',
     'cancel'                         => 'Cancel',
@@ -31,7 +31,7 @@ return [
     'remember_me'                    => 'Remember me',
     'reset_password'                 => 'Reset Password',
     'send_password'                  => 'Send Password Reset Link',
-    'save'                           => 'Save',
+    'save'                           => 'Simpan',
     'search'                         => 'Search',
     'searching'                      => 'Searching',
     'no_results'                     => 'No results',

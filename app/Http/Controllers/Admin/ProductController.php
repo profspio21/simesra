@@ -4,9 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\MassDestroyProductRequest;
+use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
 use App\Models\Product;
-use App\Models\RmCategory;
+use App\Models\RawMaterial;
 use Gate;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,11 +23,28 @@ class ProductController extends Controller
         return view('admin.products.index', compact('products'));
     }
 
+    public function create()
+    {
+        abort_if(Gate::denies('product_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
+        $rms = RawMaterial::pluck('name', 'id');
+
+        return view('admin.products.create', compact('rms'));
+    }
+
+    public function store(StoreProductRequest $request)
+    {
+        $product = Product::create($request->all());
+        $product->rms()->sync($request->input('rms', []));
+
+        return redirect()->route('admin.products.index');
+    }
+
     public function edit(Product $product)
     {
         abort_if(Gate::denies('product_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $rms = RmCategory::pluck('name', 'id');
+        $rms = RawMaterial::pluck('name', 'id');
 
         $product->load('rms');
 

@@ -22,6 +22,7 @@ class RawMaterial extends Model
         'name',
         'category_id',
         'ok_id',
+        'qty',
         'created_at',
         'updated_at',
         'deleted_at',
@@ -35,6 +36,11 @@ class RawMaterial extends Model
     public function ok()
     {
         return $this->belongsTo(OutletKitchen::class, 'ok_id');
+    }
+
+    public function products()
+    {
+        return $this->belongsToMany(Product::class, 'product_rm', 'product_id', 'rm_id');
     }
 
     protected function serializeDate(DateTimeInterface $date)

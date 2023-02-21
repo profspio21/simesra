@@ -7,32 +7,54 @@
     </div>
 
     <ul class="c-sidebar-nav">
-        <li class="c-sidebar-nav-item">
+        {{-- <li class="c-sidebar-nav-item">
             <a href="{{ route("admin.home") }}" class="c-sidebar-nav-link">
                 <i class="c-sidebar-nav-icon fas fa-fw fa-tachometer-alt">
 
                 </i>
                 {{ trans('global.dashboard') }}
             </a>
-        </li>
+        </li> --}}
         @can('sale_access')
-            <li class="c-sidebar-nav-item">
-                <a href="{{ route("admin.sales.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/sales") || request()->is("admin/sales/*") ? "c-active" : "" }}">
-                    <i class="fa-fw fas fa-book-open c-sidebar-nav-icon">
+        <li class="c-sidebar-nav-dropdown {{ request()->is("admin/sales*") ? "c-show" : "" }}">
+            <a class="c-sidebar-nav-dropdown-toggle" href="#">
+                <i class="fa-fw fas fa-book-open c-sidebar-nav-icon">
 
-                    </i>
-                    {{ trans('cruds.sale.title') }}
-                </a>
-            </li>
+                </i>
+                Penjualan
+            </a>
+            <ul class="c-sidebar-nav-dropdown-items">
+                @foreach (App\Models\OutletKitchen::whereIn('id',auth()->user()->ok()->pluck('outlet_kitchen_id'))->pluck('lokasi','id') as $id=>$ok)
+                <li class="c-sidebar-nav-item">
+                    <a href="{{ route("admin.sales.list", ['id' => $id]) }}" class="c-sidebar-nav-link {{ request()->is("admin/sales") || request()->is("admin/sales/*") ? "c-active" : "" }}">
+                        <i class="fa-fw fas fa-book-open c-sidebar-nav-icon">
+
+                        </i>
+                        {{$ok}}
+                    </a>
+                </li>
+                @endforeach
+            </ul>
         @endcan
         @can('order_access')
-            <li class="c-sidebar-nav-item">
-                <a href="{{ route("admin.orders.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/orders") || request()->is("admin/orders/*") ? "c-active" : "" }}">
-                    <i class="fa-fw fab fa-first-order c-sidebar-nav-icon">
+            <li class="c-sidebar-nav-dropdown {{ request()->is("admin/orders*") ? "c-show" : "" }}">
+                <a class="c-sidebar-nav-dropdown-toggle" href="#">
+                    <i class="fa-fw fas fa-cogs c-sidebar-nav-icon">
 
                     </i>
-                    {{ trans('cruds.order.title') }}
+                    {{ trans('cruds.order.title') }} dan Perubahan
                 </a>
+                <ul class="c-sidebar-nav-dropdown-items">
+                    <li class="c-sidebar-nav-item">
+                        <a href="{{ route("admin.orders.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/orders") || request()->is("admin/orders/*") ? "c-active" : "" }}">
+                            <i class="fa-fw fab fa-first-order c-sidebar-nav-icon">
+
+                            </i>
+                            {{ trans('cruds.order.title') }}
+                        </a>
+                        
+                    </li>
+                </ul>
             </li>
         @endcan
         @can('bahan_access')
@@ -60,7 +82,7 @@
                                 <i class="fa-fw fas fa-utensils c-sidebar-nav-icon">
 
                                 </i>
-                                {{ trans('cruds.rawMaterial.title') }}
+                                Stok {{ trans('cruds.rawMaterial.title') }}
                             </a>
                         </li>
                     @endcan

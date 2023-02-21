@@ -15,9 +15,10 @@ return new class extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->string('order_to');
+            $table->string('code')->nullable();
+            $table->string('order_to')->nullable();
+            $table->string('type')->nullable();
             $table->foreignId('ok_id')->nullable()->references('id')->on('outlet_kitchens')->onDelete('set null');
-            $table->foreignId('rm_id')->nullable()->references('id')->on('raw_materials')->onDelete('set null');
             $table->foreignId('user_id')->nullable()->references('id')->on('users')->onDelete('set null');
             $table->integer('qty');
             $table->string('keterangan');

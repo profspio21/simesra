@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('outlet_kitchens', function (Blueprint $table) {
             $table->id();
-            $table->string('location');
+            $table->string('lokasi');
             $table->timestamps();
         });
     }

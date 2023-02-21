@@ -26,6 +26,12 @@ class DatabaseSeeder extends Seeder
             PermissionRoleTableSeeder::class,
             UsersTableSeeder::class,
             RoleUserTableSeeder::class,
+            OutletKitchensTableSeeder::class,
+            RawMaterialCategoriesTableSeeder::class,
+            RawMaterialsTableSeeder::class,
+            ProductsTableSeeder::class,
+            ProductRmTableSeeder::class,
+            SalesTableSeeder::class,
         ]);
     }
 }

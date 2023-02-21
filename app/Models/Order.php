@@ -11,15 +11,20 @@ class Order extends Model
     use HasFactory;
 
     public const ORDER_TO_SELECT = [
-        'CK'         => 'Central Kitchen',
+        'ck'         => 'Central Kitchen',
         'purchasing' => 'Purchasing',
     ];
 
+    public const TYPE_SELECT = [
+        'Penambahan' => 'Penambahan Stok',
+        'Pengurangan' => 'Pengurangan Stok',
+    ];
+
     public const STATUS_SELECT = [
-        '0'  => 'Permohonan ke CK',
-        '1'  => 'Pengiriman',
-        '2'  => 'Selesai',
-        '99' => 'Dibatalkan',
+        0  => 'Permohonan ke CK',
+        1  => 'Pengiriman',
+        2  => 'Selesai',
+        9 => 'Dibatalkan',
     ];
 
     public $table = 'orders';
@@ -32,6 +37,7 @@ class Order extends Model
 
     protected $fillable = [
         'order_to',
+        'type',
         'ok_id',
         'user_id',
         'keterangan',
@@ -49,6 +55,11 @@ class Order extends Model
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function rms()
+    {
+        return $this->belongsToMany(Rawmaterial::class)->withPivot('qty','keterangan')->withTimestamps();;
     }
 
     protected function serializeDate(DateTimeInterface $date)

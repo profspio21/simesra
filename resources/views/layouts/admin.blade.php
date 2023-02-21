@@ -10,7 +10,7 @@
     <title>{{ trans('panel.site_title') }}</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet" />
-    <link href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" rel="stylesheet" />
     <link href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
     <link href="https://cdn.datatables.net/buttons/1.2.4/css/buttons.dataTables.min.css" rel="stylesheet" />
@@ -27,6 +27,8 @@
 
 <body class="c-app">
     @include('partials.menu')
+    @include('sweetalert::alert')
+
     <div class="c-wrapper">
         <header class="c-header c-header-fixed px-3">
             <button class="c-header-toggler c-class-toggler d-lg-none mfe-auto" type="button" data-target="#sidebar" data-class="c-sidebar-show">
@@ -59,8 +61,6 @@
 
         <div class="c-body">
             <main class="c-main">
-
-
                 <div class="container-fluid">
                     @if(session('message'))
                         <div class="row mb-2">
@@ -172,53 +172,53 @@
         }
       },
       {
-        extend: 'copy',
-        className: 'btn-default',
-        text: copyButtonTrans,
-        exportOptions: {
-          columns: ':visible'
-        }
-      },
-      {
-        extend: 'csv',
-        className: 'btn-default',
-        text: csvButtonTrans,
-        exportOptions: {
-          columns: ':visible'
-        }
-      },
-      {
         extend: 'excel',
         className: 'btn-default',
         text: excelButtonTrans,
         exportOptions: {
           columns: ':visible'
         }
-      },
-      {
-        extend: 'pdf',
-        className: 'btn-default',
-        text: pdfButtonTrans,
-        exportOptions: {
-          columns: ':visible'
-        }
-      },
-      {
-        extend: 'print',
-        className: 'btn-default',
-        text: printButtonTrans,
-        exportOptions: {
-          columns: ':visible'
-        }
-      },
-      {
-        extend: 'colvis',
-        className: 'btn-default',
-        text: colvisButtonTrans,
-        exportOptions: {
-          columns: ':visible'
-        }
       }
+      // {
+      //   extend: 'copy',
+      //   className: 'btn-default',
+      //   text: copyButtonTrans,
+      //   exportOptions: {
+      //     columns: ':visible'
+      //   }
+      // },
+      // {
+      //   extend: 'csv',
+      //   className: 'btn-default',
+      //   text: csvButtonTrans,
+      //   exportOptions: {
+      //     columns: ':visible'
+      //   }
+      // },
+      // {
+      //   extend: 'pdf',
+      //   className: 'btn-default',
+      //   text: pdfButtonTrans,
+      //   exportOptions: {
+      //     columns: ':visible'
+      //   }
+      // },
+      // {
+      //   extend: 'print',
+      //   className: 'btn-default',
+      //   text: printButtonTrans,
+      //   exportOptions: {
+      //     columns: ':visible'
+      //   }
+      // },
+      // {
+      //   extend: 'colvis',
+      //   className: 'btn-default',
+      //   text: colvisButtonTrans,
+      //   exportOptions: {
+      //     columns: ':visible'
+      //   }
+      // }
     ]
   });
 

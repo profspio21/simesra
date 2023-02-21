@@ -21,6 +21,7 @@ class Sale extends Model
     protected $fillable = [
         'product_id',
         'qty',
+        'ok_id',
         'user_id',
         'created_at',
         'updated_at',
@@ -35,6 +36,11 @@ class Sale extends Model
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function ok()
+    {
+        return $this->belongsTo(OutletKitchen::class, 'ok_id');
     }
 
     protected function serializeDate(DateTimeInterface $date)

@@ -137,6 +137,8 @@ return [
             'rm_helper'         => ' ',
             'created_at'        => 'Created at',
             'created_at_helper' => ' ',
+            'created_by'        => 'Dibuat oleh',
+            'created_by_helper' => ' ',
             'updated_at'        => 'Updated at',
             'updated_at_helper' => ' ',
             'deleted_at'        => 'Deleted at',

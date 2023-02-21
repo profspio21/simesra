@@ -1,6 +1,14 @@
 @extends('layouts.admin')
 @section('content')
-
+@can('product_create')
+    <div style="margin-bottom: 10px;" class="row">
+        <div class="col-lg-12">
+            <a class="btn btn-success" href="{{ route('admin.products.create') }}">
+                {{ trans('global.add') }} {{ trans('cruds.product.title_singular') }}
+            </a>
+        </div>
+    </div>
+@endcan
 <div class="card">
     <div class="card-header">
         {{ trans('cruds.product.title_singular') }} {{ trans('global.list') }}
@@ -14,9 +22,7 @@
                         <th width="10">
 
                         </th>
-                        <th>
-                            {{ trans('cruds.product.fields.id') }}
-                        </th>
+                        
                         <th>
                             {{ trans('cruds.product.fields.name') }}
                         </th>
@@ -34,23 +40,21 @@
                             <td>
 
                             </td>
-                            <td>
-                                {{ $product->id ?? '' }}
-                            </td>
+                            
                             <td>
                                 {{ $product->name ?? '' }}
                             </td>
                             <td>
                                 @foreach($product->rms as $key => $item)
-                                    <span class="badge badge-info">{{ $item->name }}</span>
+                                    <span class="badge ">{{ $item->category->name }} : {{ $item->name }}</span><br>
                                 @endforeach
                             </td>
                             <td>
-                                @can('product_show')
+                                {{-- @can('product_show')
                                     <a class="btn btn-xs btn-primary" href="{{ route('admin.products.show', $product->id) }}">
                                         {{ trans('global.view') }}
                                     </a>
-                                @endcan
+                                @endcan --}}
 
                                 @can('product_edit')
                                     <a class="btn btn-xs btn-info" href="{{ route('admin.products.edit', $product->id) }}">
