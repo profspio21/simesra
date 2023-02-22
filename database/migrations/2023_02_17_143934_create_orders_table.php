@@ -21,8 +21,8 @@ return new class extends Migration
             $table->foreignId('ok_id')->nullable()->references('id')->on('outlet_kitchens')->onDelete('set null');
             $table->foreignId('user_id')->nullable()->references('id')->on('users')->onDelete('set null');
             $table->integer('qty');
-            $table->string('keterangan');
-            $table->string('status');
+            $table->string('keterangan')->nullable();
+            $table->string('status')->nullable();
             $table->timestamps();
         });
     }

@@ -14,6 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('product_rm', function (Blueprint $table) {
+            $table->id();
             $table->foreignId('product_id');
             $table->foreignId('rm_id');
             $table->timestamps();

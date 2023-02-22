@@ -206,6 +206,22 @@ class PermissionsTableSeeder extends Seeder
                 'id'    => 49,
                 'title' => 'import',
             ],
+            [
+                'id'    => 50,
+                'title' => 'approve_reject_ck',
+            ],
+            [
+                'id'    => 51,
+                'title' => 'confirm_ok_om',
+            ],
+            [
+                'id'    => 52,
+                'title' => 'approve_sa',
+            ],
+            [
+                'id'    => 53,
+                'title' => 'approve_om',
+            ],
         ];
 
         Permission::insert($permissions);

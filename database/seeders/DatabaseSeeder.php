@@ -32,6 +32,7 @@ class DatabaseSeeder extends Seeder
             ProductsTableSeeder::class,
             ProductRmTableSeeder::class,
             SalesTableSeeder::class,
+            OkRmTableSeeder::class,
         ]);
     }
 }

@@ -111,6 +111,8 @@ return [
             'category_helper'   => ' ',
             'ok'                => 'OK',
             'ok_helper'         => ' ',
+            'approved_qty'       => 'Approved qty',
+            'approved_qty_helper'=> ' ',
             'created_at'        => 'Created at',
             'created_at_helper' => ' ',
             'updated_at'        => 'Updated at',
@@ -166,9 +168,12 @@ return [
         ],
     ],
     'order' => [
-        'title'          => 'Order',
-        'title_singular' => 'Order',
+        'title'          => 'Perubahan Stok',
+        'title_singular' => 'Perubahan Stok',
         'fields'         => [
+            'perubahan'                => 'Perubahan Stok',
+            'penambahan'                => 'Penambahan Stok',
+            'pengurangan'                => 'Pengurangan Stok',
             'id'                => 'ID',
             'id_helper'         => ' ',
             'order_to'          => 'Order To',

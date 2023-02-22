@@ -10,13 +10,11 @@
         <form method="POST" action="{{ route("admin.orders.update", [$order->id]) }}" enctype="multipart/form-data">
             @method('PUT')
             @csrf
+            @if($order->order_to != null)
             <div class="form-group">
                 <label class="required">{{ trans('cruds.order.fields.order_to') }}</label>
-                <select class="form-control {{ $errors->has('order_to') ? 'is-invalid' : '' }}" name="order_to" id="order_to" required>
-                    <option value disabled {{ old('order_to', null) === null ? 'selected' : '' }}>{{ trans('global.pleaseSelect') }}</option>
-                    @foreach(App\Models\Order::ORDER_TO_SELECT as $key => $label)
-                        <option value="{{ $key }}" {{ old('order_to', $order->order_to) === (string) $key ? 'selected' : '' }}>{{ $label }}</option>
-                    @endforeach
+                <select class="form-control {{ $errors->has('order_to') ? 'is-invalid' : '' }}" name="order_to" id="order_to" required >
+                    <option value="{{$order->order_to}}">{{ App\Models\Order::ORDER_TO_SELECT[$order->order_to] }}</option>
                 </select>
                 @if($errors->has('order_to'))
                     <div class="invalid-feedback">
@@ -25,12 +23,23 @@
                 @endif
                 <span class="help-block">{{ trans('cruds.order.fields.order_to_helper') }}</span>
             </div>
+            @endif
+            <div class="form-group">
+                <label class="required">{{ trans('cruds.order.fields.type') }}</label>
+                <select class="form-control {{ $errors->has('type') ? 'is-invalid' : '' }}" name="type" id="type" required >
+                    <option value="{{ $order->type }}">{{ App\Models\Order::TYPE_SELECT[$order->type] }}</option>
+                </select>
+                @if($errors->has('order_type'))
+                    <div class="invalid-feedback">
+                        {{ $errors->first('order_type') }}
+                    </div>
+                @endif
+                <span class="help-block">{{ trans('cruds.order.fields.order_to_helper') }}</span>
+            </div>
             <div class="form-group">
                 <label class="required" for="ok_id">{{ trans('cruds.order.fields.ok') }}</label>
-                <select class="form-control select2 {{ $errors->has('ok') ? 'is-invalid' : '' }}" name="ok_id" id="ok_id" required>
-                    @foreach($oks as $id => $entry)
-                        <option value="{{ $id }}" {{ (old('ok_id') ? old('ok_id') : $order->ok->id ?? '') == $id ? 'selected' : '' }}>{{ $entry }}</option>
-                    @endforeach
+                <select class="form-control select2 {{ $errors->has('ok') ? 'is-invalid' : '' }}" name="ok_id" id="ok_id" required >
+                    <option value="{{ $order->ok_id }}">{{ $order->ok->lokasi }}</option>
                 </select>
                 @if($errors->has('ok'))
                     <div class="invalid-feedback">
@@ -39,23 +48,10 @@
                 @endif
                 <span class="help-block">{{ trans('cruds.order.fields.ok_helper') }}</span>
             </div>
-            <div class="form-group">
-                <label class="required" for="user_id">{{ trans('cruds.order.fields.user') }}</label>
-                <select class="form-control select2 {{ $errors->has('user') ? 'is-invalid' : '' }}" name="user_id" id="user_id" required>
-                    @foreach($users as $id => $entry)
-                        <option value="{{ $id }}" {{ (old('user_id') ? old('user_id') : $order->user->id ?? '') == $id ? 'selected' : '' }}>{{ $entry }}</option>
-                    @endforeach
-                </select>
-                @if($errors->has('user'))
-                    <div class="invalid-feedback">
-                        {{ $errors->first('user') }}
-                    </div>
-                @endif
-                <span class="help-block">{{ trans('cruds.order.fields.user_helper') }}</span>
-            </div>
+            
             <div class="form-group">
                 <label for="keterangan">{{ trans('cruds.order.fields.keterangan') }}</label>
-                <input class="form-control {{ $errors->has('keterangan') ? 'is-invalid' : '' }}" type="text" name="keterangan" id="keterangan" value="{{ old('keterangan', $order->keterangan) }}">
+                <input class="form-control {{ $errors->has('keterangan') ? 'is-invalid' : '' }}" type="text" name="keterangan" id="keterangan" value="{{ old('keterangan', $order->keterangan) }}" disabled>
                 @if($errors->has('keterangan'))
                     <div class="invalid-feedback">
                         {{ $errors->first('keterangan') }}
@@ -63,25 +59,56 @@
                 @endif
                 <span class="help-block">{{ trans('cruds.order.fields.keterangan_helper') }}</span>
             </div>
-            {{-- <div class="form-group">
-                <label class="required">{{ trans('cruds.order.fields.status') }}</label>
-                <select class="form-control {{ $errors->has('status') ? 'is-invalid' : '' }}" name="status" id="status" required>
-                    <option value disabled {{ old('status', null) === null ? 'selected' : '' }}>{{ trans('global.pleaseSelect') }}</option>
-                    @foreach(App\Models\Order::STATUS_SELECT as $key => $label)
-                        <option value="{{ $key }}" {{ old('status', $order->status) === (string) $key ? 'selected' : '' }}>{{ $label }}</option>
-                    @endforeach
-                </select>
-                @if($errors->has('status'))
+            @foreach ($order->rms as $item)
+            <div class="form-group row product">
+                <div class="cloneable col rms">
+                    <label for="bahan">{{ trans('cruds.rawMaterial.fields.name') }}</label>
+                    <select class="form-control select2 {{ $errors->has('ok') ? 'is-invalid' : '' }}" name="rm_id[]" required>
+                        <option value="{{ $item->id }}">{{ $item->name }} : {{$item->category->name}}</option>
+                    </select>
+                </div>
+                <div class="cloneable col">
+                    <label for="bahan">{{ trans('cruds.rawMaterial.fields.qty') }}</label>
+                    <input class="form-control" type="number" step="1" name="old_qty[]" value="{{$item->pivot->qty}}" disabled>
+                </div>
+                <div class="cloneable col">
+                    <label for="bahan">{{ trans('cruds.rawMaterial.fields.approved_qty') }}</label>
+                    <input class="form-control" type="number" step="1" name="qty[]" value="{{$item->pivot->qty}}" >
+                </div>
+                <div class="cloneable col">
+                    <label for="ket">{{ trans('cruds.rawMaterial.fields.ket') }}</label>
+                    <input class="form-control {{ $errors->has('ket') ? 'is-invalid' : '' }}" type="text" name="ket[]" value="">
+                </div>
+            </div>
+            @endforeach
+            <hr>
+            <div class="form-group" style="font-size: larger">
+                Confirm<br><br>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="confirm" id="approve" value="approve">
+                    <label class="form-check-label" for="approve">Approve</label>
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="confirm" id="reject" value="reject">
+                    <label class="form-check-label" for="reject">Reject</label>
+                  </div>
+                @if($errors->has('confirm'))
                     <div class="invalid-feedback">
-                        {{ $errors->first('status') }}
+                        {{ $errors->first('confirm') }}
                     </div>
                 @endif
-                <span class="help-block">{{ trans('cruds.order.fields.status_helper') }}</span>
-            </div> --}}
+                <span class="help-block">{{ trans('cruds.order.fields.confirm_helper') }}</span>
+            </div>
+            <hr><br>
             <div class="form-group">
-                <button class="btn btn-danger" type="submit">
+                <button class="btn btn-info" type="submit">
                     {{ trans('global.save') }}
                 </button>
+            </div>
+            <div class="form-group">
+                <a class="btn btn-primary" href="{{ route('admin.orders.index') }}">
+                    {{ trans('global.back') }}
+                </a>
             </div>
         </form>
     </div>

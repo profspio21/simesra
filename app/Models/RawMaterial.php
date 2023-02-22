@@ -12,6 +12,11 @@ class RawMaterial extends Model
 
     public $table = 'raw_materials';
 
+    public const TYPE_SELECT = [
+        'ck' => 'Central Kitchen',
+        'purchasing' => 'Purchasing',
+    ];
+
     protected $dates = [
         'created_at',
         'updated_at',
@@ -35,12 +40,12 @@ class RawMaterial extends Model
 
     public function ok()
     {
-        return $this->belongsTo(OutletKitchen::class, 'ok_id');
+        return $this->belongsToMany(OutletKitchen::class, 'outlet_kitchen_raw_material' , 'rm_id', 'ok_id')->withPivot('qty')->withTimestamps();
     }
 
     public function products()
     {
-        return $this->belongsToMany(Product::class, 'product_rm', 'product_id', 'rm_id');
+        return $this->belongsToMany(Product::class, 'product_rm', 'rm_id', 'product_id');
     }
 
     protected function serializeDate(DateTimeInterface $date)

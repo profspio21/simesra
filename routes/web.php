@@ -34,8 +34,13 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::resource('rm-categories', 'RmCategoryController');
 
     // Raw Material
+    Route::get('stock/list', 'RawMaterialController@list')->name('stock.list');
     Route::delete('raw-materials/destroy', 'RawMaterialController@massDestroy')->name('raw-materials.massDestroy');
     Route::resource('raw-materials', 'RawMaterialController');
+
+    // OkRm
+    Route::delete('okrm/destroy', 'OkrmController@massDestroy')->name('okrm.massDestroy');
+    Route::resource('okrm', 'OkrmController');
 
     // Product
     Route::delete('products/destroy', 'ProductController@massDestroy')->name('products.massDestroy');

@@ -10,12 +10,22 @@
         <form method="POST" action="{{ route("admin.orders.store") }}" enctype="multipart/form-data">
             @csrf
             <div class="form-group">
+                <label class="required">{{ trans('cruds.order.fields.type') }}</label>
+                <select class="form-control select2 {{ $errors->has('type') ? 'is-invalid' : '' }}" name="type" id="type" required>
+                        <option value="{{ $type }}">{{ App\Models\Order::TYPE_SELECT[$type] }}</option>
+                </select>
+                @if($errors->has('type'))
+                    <div class="invalid-feedback">
+                        {{ $errors->first('type') }}
+                    </div>
+                @endif
+                <span class="help-block">{{ trans('cruds.order.fields.type_helper') }}</span>
+            </div>
+            @if($type == 'penambahan')
+            <div class="form-group">
                 <label class="required">{{ trans('cruds.order.fields.order_to') }}</label>
                 <select class="form-control select2 {{ $errors->has('order_to') ? 'is-invalid' : '' }}" name="order_to" id="order_to" required>
-                    <option value disabled {{ old('order_to', null) === null ? 'selected' : '' }}>{{ trans('global.pleaseSelect') }}</option>
-                    @foreach(App\Models\Order::ORDER_TO_SELECT as $key => $label)
-                        <option value="{{ $key }}" {{ old('order_to', 'CK') === (string) $key ? 'selected' : '' }}>{{ $label }}</option>
-                    @endforeach
+                        <option value="{{ $order_to }}" >{{ App\Models\Order::ORDER_TO_SELECT[$order_to] }}</option>
                 </select>
                 @if($errors->has('order_to'))
                     <div class="invalid-feedback">
@@ -24,21 +34,7 @@
                 @endif
                 <span class="help-block">{{ trans('cruds.order.fields.order_to_helper') }}</span>
             </div>
-            <div class="form-group">
-                <label class="required">{{ trans('cruds.order.fields.type') }}</label>
-                <select class="form-control select2 {{ $errors->has('type') ? 'is-invalid' : '' }}" name="type" id="type" required>
-                    <option value disabled {{ old('type', null) === null ? 'selected' : '' }}>{{ trans('global.pleaseSelect') }}</option>
-                    @foreach(App\Models\Order::TYPE_SELECT as $key => $label)
-                        <option value="{{ $key }}" {{ old('type', 'CK') === (string) $key ? 'selected' : '' }}>{{ $label }}</option>
-                    @endforeach
-                </select>
-                @if($errors->has('type'))
-                    <div class="invalid-feedback">
-                        {{ $errors->first('type') }}
-                    </div>
-                @endif
-                <span class="help-block">{{ trans('cruds.order.fields.order_to_helper') }}</span>
-            </div>
+            @endif
             <div class="form-group">
                 <label class="required" for="ok_id">{{ trans('cruds.order.fields.ok') }}</label>
                 <select class="form-control select2 {{ $errors->has('ok') ? 'is-invalid' : '' }}" name="ok_id" id="ok_id" required>
@@ -68,7 +64,7 @@
             <div class="form-group row product">
                 <div class="cloneable col rms">
                     <label for="bahan">{{ trans('cruds.rawMaterial.fields.name') }}</label>
-                    <select class="form-control select2 {{ $errors->has('ok') ? 'is-invalid' : '' }}" name="rm_id[]" id="rm_id[]" required>
+                    <select class="form-control select2 {{ $errors->has('ok') ? 'is-invalid' : '' }}" name="rm_id[]" required>
                         @foreach($rms as $rm)
                             <option value="{{ $rm->id }}" {{ old('rm_id') == $rm->id ? 'selected' : '' }}>{{ $rm->name }} : {{$rm->category->name}}</option>
                         @endforeach
@@ -76,7 +72,7 @@
                 </div>
                 <div class="cloneable col">
                     <label for="bahan">{{ trans('cruds.rawMaterial.fields.qty') }}</label>
-                    <input class="form-control" type="number" step="1" name="qty" id="qty" value="{{ old('qty', '') }}">
+                    <input class="form-control" type="number" step="1" name="qty[]" value="{{ old('qty', '') }}">
                 </div>
                 <div class="cloneable col" style="align-self: self-end;">
                     <button class="btnaction btn btn-primary add" name="add" type="button">
@@ -108,7 +104,7 @@
 '<label for="bahan">Bahan</label>'+
 '<select class="form-control select2" name="rm_id[]" id="rm_id[]" required></select></div>'+
 '<div class="cloneable col"><label for="bahan">Qty</label>'+
-'<input class="form-control" type="number" step="1" name="qty" id="qty" value=""></div>'+
+'<input class="form-control" type="number" step="1" name="qty[]" value=""></div>'+
 '<div class="cloneable col" style="align-self: self-end;">'+
 '<button class="btnaction btn btn-primary add" name="add" type="button">'+
 '<i class="fa fa-plus" aria-hidden="true"></i></button>'+

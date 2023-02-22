@@ -131,6 +131,10 @@ table.dataTable thead .sorting_desc {
     padding: 0.25rem 1.5rem;
 }
 
+.c-sidebar-nav-dropdown-items > li {
+    margin-left: 20px;
+}
+
 /* .c-sidebar {
     background: #390303 !important;
 }

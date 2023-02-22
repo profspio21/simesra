@@ -13,10 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('raw_material_categories', function (Blueprint $table) {
+        Schema::create('outlet_kitchen_raw_material', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('type')->nullable();
+            $table->foreignId('ok_id')->references('id')->on('outlet_kitchens');
+            $table->foreignId('rm_id')->references('id')->on('raw_materials');
+            $table->integer('qty')->nullable();
             $table->timestamps();
         });
     }
@@ -28,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('raw_material_categories');
+        Schema::dropIfExists('outlet_kitchen_raw_material_pivot');
     }
 };

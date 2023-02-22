@@ -20,7 +20,9 @@ class StoreRawMaterialRequest extends FormRequest
             'name' => [
                 'string',
                 'required',
-                'unique:raw_materials',
+            ],
+            'category_id' => [
+                'required',
             ],
         ];
     }

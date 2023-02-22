@@ -30,6 +30,11 @@ class OutletKitchen extends Model
         return $this->belongsToMany(User::class);
     }
 
+    public function rm()
+    {
+        return $this->belongsToMany(RawMaterial::class, 'outlet_kitchen_raw_material' , 'ok_id', 'rm_id')->withPivot('qty')->withTimestamps();
+    }
+
     protected function serializeDate(DateTimeInterface $date)
     {
         return $date->format('Y-m-d H:i:s');

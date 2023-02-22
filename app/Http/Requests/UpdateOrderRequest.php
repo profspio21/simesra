@@ -17,9 +17,6 @@ class UpdateOrderRequest extends FormRequest
     public function rules()
     {
         return [
-            'order_to' => [
-                'required',
-            ],
             'ok_id' => [
                 'required',
                 'integer',
@@ -29,6 +26,9 @@ class UpdateOrderRequest extends FormRequest
                 'string',
                 'nullable',
             ],
+            'confirm' => [
+                'required'
+            ]
         ];
     }
 }

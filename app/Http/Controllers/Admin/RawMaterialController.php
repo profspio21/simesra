@@ -10,12 +10,26 @@ use App\Models\OutletKitchen;
 use App\Models\RawMaterial;
 use App\Models\RmCategory;
 use App\Models\Order;
+use App\Models\OkRm;
 use Gate;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class RawMaterialController extends Controller
 {
+
+    public function list(Request $request)
+    {
+        abort_if(Gate::denies('raw_material_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
+        $ok_id = $request->id;
+
+        $rawMaterials = OkRm::with('rm')->where('ok_id', $ok_id)->get();
+
+        return view('admin.rawMaterials.list', compact('rawMaterials'));
+
+    }
+
     public function index()
     {
         abort_if(Gate::denies('raw_material_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
@@ -49,11 +63,9 @@ class RawMaterialController extends Controller
 
         $categories = RmCategory::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        $oks = OutletKitchen::pluck('lokasi', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $rawMaterial->load('category');
 
-        $rawMaterial->load('category', 'ok');
-
-        return view('admin.rawMaterials.edit', compact('categories', 'oks', 'rawMaterial'));
+        return view('admin.rawMaterials.edit', compact('categories', 'rawMaterial'));
     }
 
     public function update(UpdateRawMaterialRequest $request, RawMaterial $rawMaterial)

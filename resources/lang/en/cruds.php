@@ -113,6 +113,10 @@ return [
             'ok_helper'         => ' ',
             'qty'               => 'qty',
             'qty_helper'        => ' ',
+            'ket'               => 'Ket',
+            'ket_helper'        => ' ',
+            'approved_qty'       => 'Approved qty',
+            'approved_qty_helper'=> ' ',
             'created_at'        => 'Created at',
             'created_at_helper' => ' ',
             'updated_at'        => 'Updated at',
@@ -169,6 +173,9 @@ return [
             'deleted_at_helper' => ' ',
         ],
     ],
+    'stock' => [
+        'title'     => 'Stok Bahan'
+    ],
     'order' => [
         'title'          => 'Order',
         'title_singular' => 'Order',
@@ -179,6 +186,8 @@ return [
             'code_helper'         => ' ',
             'order_to'          => 'Order To',
             'order_to_helper'   => ' ',
+            'confirm'          => 'Confirm',
+            'confirm_helper'   => ' ',
             'type'              => 'Type',
             'type_helper'       => ' ',
             'ok'                => 'OK',

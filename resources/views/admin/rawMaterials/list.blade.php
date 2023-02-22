@@ -11,7 +11,7 @@
 @endcan
 <div class="card">
     <div class="card-header">
-        {{ trans('cruds.rawMaterial.title_singular') }} {{ trans('global.list') }}
+        {{ trans('cruds.rawMaterial.title_singular') }} {{ trans('global.list') }} @if(!empty($rawMaterials->first())) {{$rawMaterials->first()->ok->first()->lokasi}} @endif
     </div>
 
     <div class="card-body">
@@ -30,6 +30,9 @@
                             {{ trans('cruds.rawMaterial.fields.category') }}
                         </th>
                         <th>
+                            {{ trans('cruds.rawMaterial.fields.qty') }}
+                        </th>
+                        <th>
                             &nbsp;
                         </th>
                     </tr>
@@ -42,36 +45,19 @@
                             </td>
                             
                             <td>
-                                {{ $rawMaterial->name ?? '' }}
+                                {{ $rawMaterial->rm->name ?? '' }}
                             </td>
                             <td>
-                                {{ $rawMaterial->category->name ?? '' }}
+                                {{ $rawMaterial->rm->category->name ?? '' }}
                             </td>
                             <td>
-                                {{-- @can('raw_material_show')
-                                    <a class="btn btn-xs btn-primary" href="{{ route('admin.raw-materials.show', $rawMaterial->id) }}">
-                                        {{ trans('global.view') }}
-                                    </a>
-                                @endcan --}}
-
-                                @can('raw_material_edit')
-                                    <a class="btn btn-xs btn-info" href="{{ route('admin.raw-materials.edit', $rawMaterial->id) }}">
-                                        {{ trans('global.edit') }}
-                                    </a>
-                                @endcan
-
-                                @can('raw_material_delete')
-                                    <form action="{{ route('admin.raw-materials.destroy', $rawMaterial->id) }}" method="POST" onsubmit="return confirm('{{ trans('global.areYouSure') }}');" style="display: inline-block;">
-                                        <input type="hidden" name="_method" value="DELETE">
-                                        <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                                        <input type="submit" class="btn btn-xs btn-danger" value="{{ trans('global.delete') }}">
-                                    </form>
-                                @endcan
+                                {{ $rawMaterial->qty ?? '' }}
+                            </td>
+                            <td>
 
                             </td>
 
                         </tr>
-                        
                     @endforeach
                 </tbody>
             </table>

@@ -3,7 +3,7 @@
 
 <div class="card">
     <div class="card-header">
-        {{ trans('global.show') }} {{ trans('cruds.order.title') }}
+        {{ trans('global.detail') }} {{ trans('cruds.order.title') }}
     </div>
 
     <div class="card-body">
@@ -63,6 +63,50 @@
                             {{ App\Models\Order::STATUS_SELECT[$order->status] ?? '' }}
                         </td>
                     </tr>
+                </tbody>
+            </table>
+            <hr>
+            List Order
+            <hr>
+            <table class="table table-bordered table-striped">
+                <tbody>
+                    
+                    <tr>
+                        <th>
+                            {{trans('cruds.rawMaterial.fields.name')}}
+                        </th>
+                        <th>
+                            {{trans('cruds.rawMaterial.fields.category')}}
+                        </th>
+                        <th>
+                            {{trans('cruds.rawMaterial.fields.qty')}}
+                        </th>
+                        <th>
+                            {{trans('cruds.rawMaterial.fields.approved_qty')}}
+                        </th>
+                        <th>
+                            {{trans('cruds.order.fields.keterangan')}}
+                        </th>
+                    </tr>
+                    @foreach ($order->rms as $item)
+                    <tr>
+                        <td>
+                            {{$item->name}}
+                        </td>
+                        <td>
+                            {{$item->category->name}}
+                        </td>
+                        <td>
+                            {{$item->pivot->qty}}
+                        </td>
+                        <td>
+                            {{$item->pivot->approved_qty}}
+                        </td>
+                        <td>
+                            {{$item->pivot->ket}}
+                        </td>
+                    </tr>
+                    @endforeach
                 </tbody>
             </table>
             <div class="form-group">

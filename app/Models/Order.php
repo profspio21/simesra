@@ -16,15 +16,17 @@ class Order extends Model
     ];
 
     public const TYPE_SELECT = [
-        'Penambahan' => 'Penambahan Stok',
-        'Pengurangan' => 'Pengurangan Stok',
+        'penambahan' => 'Penambahan Stok',
+        'pengurangan' => 'Pengurangan Stok',
     ];
 
     public const STATUS_SELECT = [
-        0  => 'Permohonan ke CK',
-        1  => 'Pengiriman',
-        2  => 'Selesai',
-        9 => 'Dibatalkan',
+        'approve_reject_ck'  => 'Permohonan ke CK',
+        'confirm_ok_om'  => 'Pengiriman',
+        'approve_om'  => 'Menunggu Persetujuan Outlet Manajer',
+        'approve_sa'  => 'Menunggu Persetujuan CEO',
+        'selesai'  => 'Selesai',
+        'batal' => 'Dibatalkan',
     ];
 
     public $table = 'orders';
@@ -59,7 +61,7 @@ class Order extends Model
 
     public function rms()
     {
-        return $this->belongsToMany(Rawmaterial::class)->withPivot('qty','keterangan')->withTimestamps();;
+        return $this->belongsToMany(Rawmaterial::class)->withPivot('qty','ket','approved_qty')->withTimestamps();;
     }
 
     protected function serializeDate(DateTimeInterface $date)

@@ -19,26 +19,32 @@ class RawMaterialCategoriesTableSeeder extends Seeder
             [
                 'id'    => 1,
                 'name'  => 'WIP',
+                'type'  => 'ck',
             ],
             [
                 'id'    => 2,
                 'name'  => 'Nasi',
+                'type'  => 'ck',
             ],
             [
                 'id'    => 3,
                 'name'  => 'Sendok',
+                'type'  => 'ck',
             ],
             [
                 'id'    => 4,
                 'name'  => 'Kemasan',
+                'type'  => 'ck',
             ],
             [
                 'id'    => 5,
                 'name'  => 'Bahan Segar',
+                'type'  => 'purchasing',
             ],
             [
                 'id'    => 99,
                 'name'  => 'Others',
+                'type'  => 'purchasing',
             ],
         ];
 

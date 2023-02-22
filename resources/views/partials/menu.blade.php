@@ -21,13 +21,33 @@
                 <i class="fa-fw fas fa-book-open c-sidebar-nav-icon">
 
                 </i>
-                Penjualan
+                {{trans('cruds.sale.title')}}
             </a>
             <ul class="c-sidebar-nav-dropdown-items">
                 @foreach (App\Models\OutletKitchen::whereIn('id',auth()->user()->ok()->pluck('outlet_kitchen_id'))->pluck('lokasi','id') as $id=>$ok)
                 <li class="c-sidebar-nav-item">
                     <a href="{{ route("admin.sales.list", ['id' => $id]) }}" class="c-sidebar-nav-link {{ request()->is("admin/sales") || request()->is("admin/sales/*") ? "c-active" : "" }}">
-                        <i class="fa-fw fas fa-book-open c-sidebar-nav-icon">
+                        <i class="fa-fw fas fa-map-marker c-sidebar-nav-icon">
+
+                        </i>
+                        {{$ok}}
+                    </a>
+                </li>
+                @endforeach
+            </ul>
+        @endcan
+        @can('raw_material_access')
+        <li class="c-sidebar-nav-dropdown {{ request()->is("admin/stock*") ? "c-show" : "" }}">
+            <a class="c-sidebar-nav-dropdown-toggle" href="#">
+                <i class="fa-fw fas fa-list-alt c-sidebar-nav-icon">
+                </i>
+                {{trans('cruds.stock.title')}}
+            </a>
+            <ul class="c-sidebar-nav-dropdown-items">
+                @foreach (App\Models\OutletKitchen::whereIn('id',auth()->user()->ok()->pluck('outlet_kitchen_id'))->pluck('lokasi','id') as $id=>$ok)
+                <li class="c-sidebar-nav-item">
+                    <a href="{{ route("admin.stock.list", ['id' => $id]) }}" class="c-sidebar-nav-link {{ request()->is("admin/stock/*") ? "c-active" : "" }}">
+                        <i class="fa-fw fas fa-map-marker c-sidebar-nav-icon">
 
                         </i>
                         {{$ok}}
@@ -42,15 +62,24 @@
                     <i class="fa-fw fas fa-cogs c-sidebar-nav-icon">
 
                     </i>
-                    {{ trans('cruds.order.title') }} dan Perubahan
+                    {{ trans('cruds.order.fields.perubahan') }} 
                 </a>
                 <ul class="c-sidebar-nav-dropdown-items">
                     <li class="c-sidebar-nav-item">
-                        <a href="{{ route("admin.orders.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/orders") || request()->is("admin/orders/*") ? "c-active" : "" }}">
+                        <a href="{{ route("admin.orders.index", ['type' => 'penambahan']) }}" class="c-sidebar-nav-link {{ request()->is("admin/orders") || request()->is("admin/orders/*") ? "c-active" : "" }}">
                             <i class="fa-fw fab fa-first-order c-sidebar-nav-icon">
 
                             </i>
-                            {{ trans('cruds.order.title') }}
+                            {{ trans('cruds.order.fields.penambahan') }}
+                        </a>
+                        
+                    </li>
+                    <li class="c-sidebar-nav-item">
+                        <a href="{{ route("admin.orders.index", ['type' => 'pengurangan']) }}" class="c-sidebar-nav-link {{ request()->is("admin/orders") || request()->is("admin/orders/*") ? "c-active" : "" }}">
+                            <i class="fa-fw fab fa-first-order c-sidebar-nav-icon">
+
+                            </i>
+                            {{ trans('cruds.order.fields.pengurangan') }}
                         </a>
                         
                     </li>
@@ -82,7 +111,7 @@
                                 <i class="fa-fw fas fa-utensils c-sidebar-nav-icon">
 
                                 </i>
-                                Stok {{ trans('cruds.rawMaterial.title') }}
+                                {{ trans('cruds.rawMaterial.title') }}
                             </a>
                         </li>
                     @endcan

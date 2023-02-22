@@ -27,7 +27,7 @@ class Product extends Model
 
     public function rms()
     {
-        return $this->belongsToMany(RawMaterial::class,'product_rm','rm_id','product_id');
+        return $this->belongsToMany(RawMaterial::class,'product_rm','product_id','rm_id');
     }
 
     public function sales()

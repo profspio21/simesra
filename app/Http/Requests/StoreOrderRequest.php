@@ -17,9 +17,6 @@ class StoreOrderRequest extends FormRequest
     public function rules()
     {
         return [
-            'order_to' => [
-                'required',
-            ],
             'ok_id' => [
                 'required',
                 'integer',

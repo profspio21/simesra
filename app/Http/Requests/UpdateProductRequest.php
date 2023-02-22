@@ -20,7 +20,7 @@ class UpdateProductRequest extends FormRequest
             'name' => [
                 'string',
                 'required',
-                'unique:products,username,' . request()->route('product')->id,
+                'unique:products,name,' . request()->route('product')->id,
             ],
             'rms.*' => [
                 'integer',

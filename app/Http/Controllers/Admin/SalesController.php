@@ -11,11 +11,11 @@ use App\Models\Sale;
 use App\Models\User;
 use App\Models\RawMaterial;
 use App\Models\OutletKitchen;
+use App\Models\OkRm;
 use Gate;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use \DB;
-use Alert;
 
 class SalesController extends Controller
 {
@@ -55,22 +55,31 @@ class SalesController extends Controller
 
     public function store(StoreSaleRequest $request)
     {
-        // $rms = RawMaterial::with('products')->where('id', $request->ok_id)->get();
-        $product = Product::with('rms')->where('id', $request->product_id)->first();
-        $rms = $product->rms->where('ok_id', $request->ok_id);
+        $ok_id = $request->ok_id;
+        $product_id = $request->product_id;
+        $rms = RawMaterial::with('products','ok')->whereHas('products', function ($query) use ($product_id) {
+            $query->where('product_id', '=', $product_id);
+        })->whereHas('ok', function ($query) use ($ok_id) {
+            $query->where('ok_id', '=', $ok_id);
+        })->get();
+
+        $okRm = OkRm::with('rm')->where('ok_id', $ok_id)->whereIn('rm_id', $rms->pluck('id'))->get();
+
 
         if(empty($rms->first())) {
-            return redirect()->route('admin.sales.list')->with('error', 'Stok tidak ada');
+            return redirect()->route('admin.sales.list', ['id' => $request->ok_id])->with('error', 'Stok tidak ada');
         }
-        foreach($rms as $rm) {
-            if( $rm->category->name != 'Others' && $rm->qty < $request->qty) {
-                return redirect()->route('admin.sales.list')->with('error', 'Stok terbatas');
+        foreach($okRm as $rm) {
+            if( $rm->rm->category->name != 'Others' && $rm->qty < $request->qty) {
+                return redirect()->route('admin.sales.list', ['id' => $request->ok_id])->with('error', 'Stok terbatas');
             }
         }
+
+        // dd($okRm->toArray());
         
-        foreach($rms as $rm) {
-            if( $rm->category->name != 'Others') {
-                RawMaterial::where('id', $rm->id)->where('ok_id',$request->ok_id)->update(['qty' => $rm->qty - $request->qty]);
+        foreach($okRm as $rm) {
+            if( $rm->rm->category->name != 'Others') {
+                $rm->update(['qty' => $rm->qty - $request->qty]);
             }
         }
 
@@ -78,7 +87,7 @@ class SalesController extends Controller
 
         $sale->update(['user_id' => auth()->user()->id]);
 
-        return redirect()->route('admin.sales.list')->with('success', 'Berhasil ditambah');
+        return redirect()->route('admin.sales.list', ['id' => $request->ok_id])->with('success', 'Berhasil ditambah');
     }
 
     public function edit(Sale $sale)
@@ -96,21 +105,32 @@ class SalesController extends Controller
 
     public function update(UpdateSaleRequest $request, Sale $sale)
     {
-        $rms = $sale->load('product')->product->load('rms')->rms;
-        foreach($rms as $rm) {
-            if ($rm->category->name != 'Others' && $rm->qty < $request->qty - $sale->qty) {
-                return redirect()->route('admin.sales.list')->with('error', 'Stok Terbatas');
+        $product_id = $sale->product_id;
+        $ok_id = $sale->ok_id;
+        $rms = RawMaterial::with('products','ok')->whereHas('products', function ($query) use ($product_id) {
+            $query->where('product_id', '=', $product_id);
+        })->whereHas('ok', function ($query) use ($ok_id) {
+            $query->where('ok_id', '=', $ok_id);
+        })->get();
+
+        $okRm = OkRm::with('rm')->where('ok_id', $ok_id)->whereIn('rm_id', $rms->pluck('id'))->get();
+
+        foreach($okRm as $rm) {
+            if ($rm->rm->category->name != 'Others' && $rm->qty < $request->qty - $sale->qty) {
+                return redirect()->route('admin.sales.list', ['id' => $sale->ok_id])->with('error', 'Stok Terbatas');
             }
         }
-        foreach($rms as $rm) {
-            if ($rm->category->name != 'Others') {
-                RawMaterial::where('id',$rm->id)->where('ok_id', $sale->ok_id)->update(['qty' => $rm->qty + $sale->qty - $request->qty]);
+
+        foreach($okRm as $rm) {
+            if ($rm->rm->category->name != 'Others') {
+                $rm->update(['qty' => $rm->qty + $sale->qty - $request->qty]);
             }
         }
+
         $sale->update($request->all());
         $sale->update(['user_id' => auth()->user()->id]);
 
-        return redirect()->route('admin.sales.list')->with('success', 'Successfully Updated');
+        return redirect()->route('admin.sales.list', ['id' => $sale->ok_id])->with('success', 'Successfully Updated');
     }
 
     public function show(Sale $sale)
@@ -126,11 +146,18 @@ class SalesController extends Controller
     {
         abort_if(Gate::denies('sale_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $product = Product::with('rms')->where('id', $sale->product_id)->first();
+        $product_id = $sale->product_id;
+        $ok_id = $sale->ok_id;
+        $rms = RawMaterial::with('products','ok')->whereHas('products', function ($query) use ($product_id) {
+            $query->where('product_id', '=', $product_id);
+        })->whereHas('ok', function ($query) use ($ok_id) {
+            $query->where('ok_id', '=', $ok_id);
+        })->get();
 
-        foreach($product->rms as $rm) {
-            $this_rm = RawMaterial::where('id', $rm->id)->where('ok_id',$sale->ok_id)->first();
-            $this_rm->update(['qty' => $this_rm->qty + $sale->qty]);
+        $okRm = OkRm::with('rm')->where('ok_id', $ok_id)->whereIn('rm_id', $rms->pluck('id'))->get();
+
+        foreach($okRm as $rm) {
+            $rm->update(['qty' => $rm->qty + $sale->qty]);
         }
 
         $sale->delete();
