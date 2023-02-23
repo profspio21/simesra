@@ -4,9 +4,12 @@
     <div style="margin-bottom: 10px;" class="row">
         <div class="col-lg-12">
             @if($type == 'pengurangan')
-            <a class="btn btn-success" href="{{ route('admin.orders.create', ['type' => $type]) }}">
+            {{-- <a class="btn btn-success" href="{{ route('admin.orders.create', ['type' => $type]) }}">
                 {{ trans('global.add') }} {{ trans('cruds.order.title_singular') }}
-            </a>
+            </a> --}}
+            <button type="button" class="btn btn-info" data-toggle="modal" data-target="#exampleModal">
+                {{ trans('global.add') }} {{ trans('cruds.order.title_singular') }}
+            </button>
             @endif
             @if($type == 'penambahan')
             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
@@ -111,22 +114,40 @@
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
+        @if ($type == 'penambahan')
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Order Ke Mana ?</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
+            <h5 class="modal-title" id="exampleModalLabel"> Order Ke Mana ? </h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
         </div>
         <div class="modal-body" style="font-size: larger">
             <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="order_to" id="ck" value="ck">
-                <label class="form-check-label" for="ck">Central Kitchen</label>
-              </div>
-              <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="order_to" id="ck" value="ck">
+                    <label class="form-check-label" for="ck">Central Kitchen</label>
+            </div>
+            <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" name="order_to" id="purchasing" value="purchasing">
                 <label class="form-check-label" for="purchasing">Purchasing</label>
-              </div>              
+            </div>  
+                        
         </div>
+        @endif
+        
+        @if($type == 'pengurangan')
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel"> Pilih Outlet Kitchen </h5>
+        </div>
+        <div class="modal-body" style="font-size: larger">
+            <div class="form-group">
+                <select class="col-form-label select2" name="ok_id" id="ok_id">
+                    @foreach ($oks as $id => $entry)
+                        <option value="{{$entry->id}}">{{$entry->lokasi}}</option>
+                    @endforeach
+                </select>
+              </div>      
+        </div>
+        @endif
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
           <button id="next" type="button" class="btn btn-primary">Next</button>
@@ -188,13 +209,17 @@
   $('#next').on("click", function() {
       var checked = $('input[name="order_to"]:checked').val();
       var type = <?php echo json_encode($type) ?>;
-      console.log(type)
-      console.log(typeof type)
-      console.log(checked)
-      console.log(typeof checked)
+      var selected = $('select[name="ok_id"]').find(':selected').val();
+      console.log(selected)
 
-      if(typeof checked !== 'undefined') {
+      if(type == 'penambahan' && typeof checked !== 'undefined') {
           let url = "/admin/orders/create?type="+type+"&order_to="+checked
+          console.log(url);
+          window.location.href = url;
+      }
+
+      if(type == 'pengurangan' && typeof selected !== 'undefined') {
+          let url = "/admin/orders/create?type="+type+"&ok_id="+selected
           console.log(url);
           window.location.href = url;
       }

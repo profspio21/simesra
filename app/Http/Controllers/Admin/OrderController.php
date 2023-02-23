@@ -27,27 +27,34 @@ class OrderController extends Controller
             $query->whereIn('ok_id', $ok_id);
         })->get();
 
+        $oks = OutletKitchen::whereIn('id', $ok_id)->get();
+
         $type = $request->type;
 
-        return view('admin.orders.index', compact('orders', 'type'));
+        return view('admin.orders.index', compact('orders', 'type', 'oks'));
     }
 
     public function create(Request $request)
     {
         abort_if(Gate::denies('order_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $oks = OutletKitchen::pluck('lokasi', 'id');
-
         $type = $request->type;
+
         $order_to = $request->order_to;
 
         if($type == 'penambahan') {
+            $oks = OutletKitchen::pluck('lokasi', 'id');
             $rms = RawMaterial::with('category')->whereHas('category', function ($query) use ($order_to) {
                 $query->where('type', $order_to);
             })->get();
         }
+        
         if($type == 'pengurangan') {
-            $rms = RawMaterial::with('category')->get();
+            $ok_id = $request->ok_id;
+            $oks = OutletKitchen::where('id', $ok_id)->pluck('lokasi','id');
+            $rms = RawMaterial::with(['category', 'ok'])->whereHas('ok', function ($query) use ($ok_id) {
+                $query->where('ok_id', $ok_id);
+            })->get();
         }
 
         return view('admin.orders.create', compact('oks','rms', 'type', 'order_to'));
@@ -64,7 +71,13 @@ class OrderController extends Controller
         }
         if($request->order_to == 'purchasing') {
             foreach ($request->rm_id as $key => $value) {
-                OkRm::create(['rm_id' => $value, 'ok_id' => $request->ok_id ,'qty' => $request->qty[$key], 'approved_qty' => $request->qty[$key]]);
+                $okrm = OkRm::where('rm_id', $value)->where('ok_id', $request->ok_id)->first();
+                if(!empty($okrm)) {
+                    $okrm->update(['qty' => $okrm->qty + $request->qty[$key]]);
+                }
+                else {
+                    OkRm::create(['rm_id' => $value, 'ok_id' => $request->ok_id ,'qty' => $request->qty[$key], 'approved_qty' => $request->qty[$key]]);
+                }
             }
             $order->update(['status' => 'selesai']);
         }

@@ -38,7 +38,6 @@
             <div class="form-group">
                 <label class="required" for="ok_id">{{ trans('cruds.order.fields.ok') }}</label>
                 <select class="form-control select2 {{ $errors->has('ok') ? 'is-invalid' : '' }}" name="ok_id" id="ok_id" required>
-                    <option value disabled {{ old('type', null) === null ? 'selected' : '' }}>{{ trans('global.pleaseSelect') }}</option>
                     @foreach($oks as $id => $entry)
                         <option value="{{ $id }}" {{ old('ok_id') == $id ? 'selected' : '' }}>{{ $entry }}</option>
                     @endforeach
