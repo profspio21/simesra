@@ -63,6 +63,9 @@ class OrderController extends Controller
             $order->update(['status' => 'approve_reject_ck']);
         }
         if($request->order_to == 'purchasing') {
+            foreach ($request->rm_id as $key => $value) {
+                OkRm::create(['rm_id' => $value, 'ok_id' => $request->ok_id ,'qty' => $request->qty[$key], 'approved_qty' => $request->qty[$key]]);
+            }
             $order->update(['status' => 'selesai']);
         }
 

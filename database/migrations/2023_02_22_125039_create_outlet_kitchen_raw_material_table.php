@@ -18,6 +18,7 @@ return new class extends Migration
             $table->foreignId('ok_id')->references('id')->on('outlet_kitchens');
             $table->foreignId('rm_id')->references('id')->on('raw_materials');
             $table->integer('qty')->nullable();
+            $table->unique(array('ok_id', 'rm_id'));
             $table->timestamps();
         });
     }

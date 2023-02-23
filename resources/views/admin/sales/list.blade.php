@@ -3,7 +3,7 @@
 @can('sale_create')
     <div style="margin-bottom: 10px;" class="row">
         <div class="col-lg-12">
-            <a class="btn btn-success" href="{{ route('admin.sales.create') }}">
+            <a class="btn btn-success" href="{{ route('admin.sales.create', ['ok_id' => $ok_id]) }}">
                 {{ trans('global.add') }} {{ trans('cruds.sale.title_singular') }}
             </a>
         </div>

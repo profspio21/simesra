@@ -222,6 +222,14 @@ class PermissionsTableSeeder extends Seeder
                 'id'    => 53,
                 'title' => 'approve_om',
             ],
+            [
+                'id'    => 54,
+                'title' => 'stock_access',
+            ],
+            [
+                'id'    => 55,
+                'title' => 'stock_create',
+            ],
         ];
 
         Permission::insert($permissions);

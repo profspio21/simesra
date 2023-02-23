@@ -42,13 +42,13 @@ class SalesController extends Controller
         return view('admin.sales.index', compact('sales','ok_id','ok'));
     }
 
-    public function create()
+    public function create(Request $request)
     {
         abort_if(Gate::denies('sale_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         $products = Product::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        $oks = OutletKitchen::whereIn('id', auth()->user()->ok()->pluck('outlet_kitchen_id'))->pluck('lokasi', 'id');
+        $oks = OutletKitchen::where('id', $request->ok_id)->pluck('lokasi', 'id');
 
         return view('admin.sales.create', compact('products', 'oks'));
     }

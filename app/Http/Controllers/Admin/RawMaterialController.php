@@ -26,7 +26,7 @@ class RawMaterialController extends Controller
 
         $rawMaterials = OkRm::with('rm')->where('ok_id', $ok_id)->get();
 
-        return view('admin.rawMaterials.list', compact('rawMaterials'));
+        return view('admin.rawMaterials.list', compact('rawMaterials', 'ok_id'));
 
     }
 

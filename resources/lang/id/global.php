@@ -3,6 +3,7 @@
 return [
     'actions'                        => 'Aksi',
     'add'                            => 'Tambah',
+    'approve'                            => 'Approve',
     'allRightsReserved'              => 'All rights reserved.',
     'areYouSure'                     => 'Apakah anda yakin?',
     'clickHereToVerify'              => 'Klik di sini untuk memverifikasi',

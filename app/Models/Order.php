@@ -61,7 +61,7 @@ class Order extends Model
 
     public function rms()
     {
-        return $this->belongsToMany(Rawmaterial::class)->withPivot('qty','ket','approved_qty')->withTimestamps();;
+        return $this->belongsToMany(RawMaterial::class)->withPivot('qty','ket','approved_qty')->withTimestamps();;
     }
 
     protected function serializeDate(DateTimeInterface $date)
