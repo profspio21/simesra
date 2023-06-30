@@ -43,7 +43,7 @@ class OrderController extends Controller
         $order_to = $request->order_to;
 
         if($type == 'penambahan') {
-            $oks = OutletKitchen::pluck('lokasi', 'id');
+            $oks = OutletKitchen::whereIn('id',auth()->user()->ok()->pluck('outlet_kitchen_id'))->pluck('lokasi', 'id');
             $rms = RawMaterial::with('category')->whereHas('category', function ($query) use ($order_to) {
                 $query->where('type', $order_to);
             })->get();
@@ -62,6 +62,16 @@ class OrderController extends Controller
 
     public function store(StoreOrderRequest $request)
     {
+        $type = $request->type;
+        if($type == 'pengurangan') {
+            foreach ($request->rm_id as $key => $value) {
+                $okrm = OkRm::where('rm_id', $value)->where('ok_id', $request->ok_id)->first();
+                if(empty($okrm) || $okrm->qty < $request->qty[$key]) {
+                    return redirect()->route('admin.orders.index', compact('type'))->with('error', 'Masukkan jumlah dengan benar');
+                }
+            }
+        }
+        
         $order = Order::create($request->all());
 
         $order->update(['user_id' => auth()->user()->id]);
@@ -69,6 +79,14 @@ class OrderController extends Controller
         if($request->order_to == 'ck') {
             $order->update(['status' => 'approve_reject_ck']);
         }
+
+        // Added inventory
+        if($request->order_to == 'inventory')
+        {
+            $order->update(['status' => 'approve_reject_inventory']);
+        }
+
+        ///
         if($request->order_to == 'purchasing') {
             foreach ($request->rm_id as $key => $value) {
                 $okrm = OkRm::where('rm_id', $value)->where('ok_id', $request->ok_id)->first();
@@ -99,7 +117,7 @@ class OrderController extends Controller
     {
         abort_if(Gate::denies('order_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $oks = OutletKitchen::pluck('lokasi', 'id');
+        $oks = OutletKitchen::whereIn('id',auth()->user()->ok()->pluck('outlet_kitchen_id'))->pluck('lokasi', 'id');
 
         $rms = RawMaterial::with('category')->get();
 
@@ -122,18 +140,26 @@ class OrderController extends Controller
                     $this_rm = OkRm::where('rm_id', $value)->where('ok_id', $order->ok_id)->first();
                     // dd(empty($this_rm));
                     if(!empty($this_rm))  {
-                        $this_rm->update(['qty' => $this_rm->qty + $request->qty[$key]]);
+                        $this_rm->update(['qty' => $this_rm->qty + $request->approved_qty[$key]]);
                     }
                     if(empty($this_rm)) {
-                        $this_rm = OkRm::create(['ok_id' => $order->ok_id, 'rm_id' => $value, 'qty' => $request->qty[$key]]);
-                    }                    
-                    $order->rms()->syncWithoutDetaching([$value => ['qty' => $request->qty[$key], 'ket' => $request->ket[$key]]]);
+                        $this_rm = OkRm::create(['ok_id' => $order->ok_id, 'rm_id' => $value, 'qty' => $request->approved_qty[$key]]);
+                    }
+                    $order->rms()->syncWithoutDetaching([$value => [ 'approved_qty' => $request->approved_qty[$key], 'ket' => $request->ket[$key]]]);
                 }
                 $order->update(['status' => 'selesai']);
             }
             if($order->status == 'approve_reject_ck') {
+                // dd($request->all());
                 foreach ($request->rm_id as $key => $value) {
-                    $order->rms()->syncWithoutDetaching([$value => ['qty' => $request->qty[$key], 'ket' => $request->ket[$key]]]);
+                    $order->rms()->syncWithoutDetaching([$value => [ 'approved_qty' => $request->approved_qty[$key], 'ket' => $request->ket[$key]]]);
+                }
+                $order->update(['status' => 'confirm_ok_om']);
+            }
+            if($order->status == 'approve_reject_inventory') {
+                // dd($request->all());
+                foreach ($request->rm_id as $key => $value) {
+                    $order->rms()->syncWithoutDetaching([$value => [ 'approved_qty' => $request->approved_qty[$key], 'ket' => $request->ket[$key]]]);
                 }
                 $order->update(['status' => 'confirm_ok_om']);
             }
@@ -142,7 +168,7 @@ class OrderController extends Controller
                 foreach ($request->rm_id as $key => $value) {
                     $this_rm = OkRm::where('rm_id', $value)->where('ok_id', $order->ok_id)->first();
                     if(!empty($this_rm))  {
-                        $this_rm->update(['qty' => $this_rm->qty - $request->qty[$key]]);
+                        $this_rm->update(['qty' => $this_rm->qty - $request->approved_qty[$key]]);
                     }
                 }                
                 $order->update(['status' => 'selesai']);

@@ -25,9 +25,11 @@ class SalesController extends Controller
 
         $ok_id = $request->id;
 
-        $products = Product::with('sales')->get();
+        $products = Product::with('sales','rms')->get();
+        
+        $ok = OutletKitchen::where('id', $ok_id)->first();
 
-        return view('admin.sales.list', compact('products','ok_id'));
+        return view('admin.sales.list', compact('products','ok_id','ok'));
     }
     public function index(Request $request)
     {
@@ -49,8 +51,10 @@ class SalesController extends Controller
         $products = Product::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
         $oks = OutletKitchen::where('id', $request->ok_id)->pluck('lokasi', 'id');
+        
+        $ok = OutletKitchen::where('id', $request->ok_id)->first();
 
-        return view('admin.sales.create', compact('products', 'oks'));
+        return view('admin.sales.create', compact('products', 'oks', 'ok'));
     }
 
     public function store(StoreSaleRequest $request)

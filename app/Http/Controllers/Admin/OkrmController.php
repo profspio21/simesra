@@ -47,18 +47,39 @@ class OkrmController extends Controller
         return redirect()->route('admin.stock.list', ['id' => $okrm->ok_id]);
     }
 
-    public function edit(OkRm $okrm)
+    public function edit(Request $request, OkRm $okrm)
     {
+        dd($request->all());
         abort_if(Gate::denies('stock_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        $okrm->load(['ok','rm']);
 
-        return view('admin.okrm.edit', compact('okrm'));
+        if($okrm->rm->catergory_id != '99') {
+            return view('admin.stock.list', ['id' => $okrm->ok_id])->with('error', 'Not Allowed');
+        }
+        
+
+        return view('admin.okrms.edit', compact('okrm'));
+    }
+    
+    public function editStock(Request $request)
+    {
+        // dd($request->all());
+        abort_if(Gate::denies('stock_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        $okrm = OkRm::with(['ok','rm'])->where('id', $request->id)->first();
+
+        if($okrm->rm->category->name != 'Others') {
+            return redirect()->route('admin.stock.list', ['id' => $okrm->ok_id])->with('error', 'Not Allowed');
+
+        }
+        
+        return view('admin.okrms.edit', compact('okrm'));
     }
 
-    public function update(Request $request, OkRm $okrm)
+    public function update(Request $request)
     {
-        $okrm->update($request->all());
-
-        return redirect()->route('admin.okrm.index');
+        $okrm = OkRm::where('rm_id', $request->rm_id)->where('ok_id', $request->ok_id)->first()->update(['qty' => $request->qty]);
+        
+        return redirect()->route('admin.stock.list', ['id' => $request->ok_id])->with('success','Successfully Updated');
     }
 
     public function show(OkRm $okrm)

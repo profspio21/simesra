@@ -3,7 +3,9 @@
 
 <div class="card">
     <div class="card-header">
-        {{ trans('global.create') }} {{ trans('cruds.sale.title_singular') }}
+        <h2>
+            {{ trans('global.add') }} {{ trans('cruds.sale.title_singular') }} {{$ok->lokasi}}
+        </h2>
     </div>
 
     <div class="card-body">
@@ -39,7 +41,7 @@
             </div>
             <div class="form-group">
                 <label class="required" for="qty">{{ trans('cruds.sale.fields.qty') }}</label>
-                <input class="form-control {{ $errors->has('qty') ? 'is-invalid' : '' }}" type="number" name="qty" id="qty" value="{{ old('qty', '') }}" step="1" required>
+                <input class="form-control {{ $errors->has('qty') ? 'is-invalid' : '' }}" type="number" name="qty" id="qty" value="{{ old('qty', '') }}" step="1" min="0" required>
                 @if($errors->has('qty'))
                     <div class="invalid-feedback">
                         {{ $errors->first('qty') }}

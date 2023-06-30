@@ -20,6 +20,7 @@ class RmCategory extends Model
 
     protected $fillable = [
         'name',
+        'type',
         'created_at',
         'updated_at',
         'deleted_at',

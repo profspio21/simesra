@@ -39,6 +39,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::resource('raw-materials', 'RawMaterialController');
 
     // OkRm
+    Route::get('stocks/edit', 'OkrmController@editStock')->name('stocks.edit');
     Route::delete('okrms/destroy', 'OkrmController@massDestroy')->name('okrms.massDestroy');
     Route::resource('stock', 'OkrmController')->parameters(['stock' => 'okrms']);
 

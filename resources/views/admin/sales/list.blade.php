@@ -11,7 +11,9 @@
 @endcan
 <div class="card">
     <div class="card-header">
-        {{ trans('cruds.sale.title_singular') }} {{ trans('global.list') }}
+        <h2>
+            {{ trans('global.list') }} {{ trans('cruds.sale.title_singular') }} {{$ok->lokasi}}
+        </h2>
     </div>
 
     <div class="card-body">
@@ -38,6 +40,7 @@
                 </thead>
                 <tbody>
                     @foreach($products as $key => $product)
+                    @if($product->sales->where('ok_id', $ok_id)->sum('qty') > 0)
                         <tr data-entry-id="{{ $product->id }}">
                             <td>
 
@@ -60,6 +63,7 @@
                             </td>
 
                         </tr>
+                        @endif
                     @endforeach
                 </tbody>
             </table>
@@ -110,7 +114,11 @@
     order: [[ 1, 'desc' ]],
     pageLength: 100,
   });
-  // let table = $('.datatable-Sale:not(.ajaxTable)').DataTable({ buttons: dtButtons })
+  @can('export')
+  let table = $('.datatable-Sale:not(.ajaxTable)').DataTable({ buttons: dtButtons })
+  @else
+  let table = $('.datatable-Sale:not(.ajaxTable)').DataTable({ buttons: [] })
+  @endcan
   $('a[data-toggle="tab"]').on('shown.bs.tab click', function(e){
       $($.fn.dataTable.tables(true)).DataTable()
           .columns.adjust();

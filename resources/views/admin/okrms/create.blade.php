@@ -3,22 +3,23 @@
 
 <div class="card">
     <div class="card-header">
-        {{ trans('global.create') }} {{ trans('cruds.rawMaterial.title_singular') }}
+        <h2>{{ trans('global.add') }} {{ trans('cruds.stock.title') }} {{ $oks->first()->lokasi}}
+        </h2>
     </div>
 
     <div class="card-body">
         <form method="POST" action="{{ route("admin.stock.store") }}" enctype="multipart/form-data">
             @csrf
             <div class="form-group">
-                <label for="ok_id">{{ trans('cruds.rawMaterial.fields.rm') }}</label>
-                <select class="form-control select2 {{ $errors->has('rm') ? 'is-invalid' : '' }}" name="ok_id" id="ok_id">
+                <label for="ok_id">{{ trans('cruds.rawMaterial.fields.ok') }}</label>
+                <select class="form-control select2 {{ $errors->has('ok') ? 'is-invalid' : '' }}" name="ok_id" id="ok_id">
                     @foreach($oks as $id => $entry)
                         <option value="{{ $entry->id }}" {{ old('ok_id') == $id ? 'selected' : '' }}>{{ $entry->lokasi }}</option>
                     @endforeach
                 </select>
-                @if($errors->has('rm'))
+                @if($errors->has('ok'))
                     <div class="invalid-feedback">
-                        {{ $errors->first('rm') }}
+                        {{ $errors->first('ok') }}
                     </div>
                 @endif
                 <span class="help-block">{{ trans('cruds.rawMaterial.fields.category_helper') }}</span>
@@ -39,7 +40,7 @@
             </div>
             <div class="form-group">
                 <label for="qty">{{ trans('cruds.rawMaterial.fields.qty') }}</label>
-                <input class="form-control {{ $errors->has('qty') ? 'is-invalid' : '' }}" type="text" name="qty" id="qty" value="{{ old('qty', '') }}">
+                <input class="form-control {{ $errors->has('qty') ? 'is-invalid' : '' }}" type="number" min="0" name="qty" id="qty" value="{{ old('qty', '') }}">
                 @if($errors->has('qty'))
                     <div class="invalid-feedback">
                         {{ $errors->first('qty') }}

@@ -11,7 +11,9 @@
 @endcan
 <div class="card">
     <div class="card-header">
-        {{ trans('cruds.rawMaterial.title_singular') }} {{ trans('global.list') }} @if(!empty($rawMaterials->first())) {{$rawMaterials->first()->ok->first()->lokasi}} @endif
+        <h2>
+        {{ trans('cruds.stock.title') }} {{$ok->lokasi}}
+        </h2>
     </div>
 
     <div class="card-body">
@@ -54,6 +56,13 @@
                                 {{ $rawMaterial->qty ?? '' }}
                             </td>
                             <td>
+                                @if($rawMaterial->rm->category->name == 'Others')
+                                @can('stock_edit')
+                                    <a class="btn btn-xs btn-info" href="{{ route('admin.stocks.edit', ['id' => $rawMaterial->id]) }}">
+                                        {{ trans('global.edit') }}
+                                    </a>
+                                @endcan
+                                @endif
 
                             </td>
 
@@ -77,7 +86,7 @@
   let deleteButtonTrans = '{{ trans('global.datatables.delete') }}'
   let deleteButton = {
     text: deleteButtonTrans,
-    url: "{{ route('admin.raw-materials.massDestroy') }}",
+    url: "{{ route('admin.okrms.massDestroy') }}",
     className: 'btn-danger',
     action: function (e, dt, node, config) {
       var ids = $.map(dt.rows({ selected: true }).nodes(), function (entry) {

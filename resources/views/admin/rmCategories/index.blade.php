@@ -27,6 +27,9 @@
                             {{ trans('cruds.rmCategory.fields.name') }}
                         </th>
                         <th>
+                            Type Order To
+                        </th>
+                        <th>
                             &nbsp;
                         </th>
                     </tr>
@@ -40,6 +43,9 @@
                             
                             <td>
                                 {{ $rmCategory->name ?? '' }}
+                            </td>
+                            <td>
+                                {{ $rmCategory->type ?? '' }}
                             </td>
                             <td>
                                 {{-- @can('rm_category_show')
@@ -61,9 +67,7 @@
                                         <input type="submit" class="btn btn-xs btn-danger" value="{{ trans('global.delete') }}">
                                     </form>
                                 @endcan
-
                             </td>
-
                         </tr>
                     @endforeach
                 </tbody>
@@ -115,7 +119,9 @@
     order: [[ 1, 'desc' ]],
     pageLength: 100,
   });
+  @can('import')
   let table = $('.datatable-RmCategory:not(.ajaxTable)').DataTable({ buttons: dtButtons })
+  @endcan
   $('a[data-toggle="tab"]').on('shown.bs.tab click', function(e){
       $($.fn.dataTable.tables(true)).DataTable()
           .columns.adjust();

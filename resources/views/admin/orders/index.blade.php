@@ -21,7 +21,9 @@
 @endcan
 <div class="card">
     <div class="card-header">
-        {{ trans('cruds.order.title_singular') }} {{ trans('global.list') }}
+        <h2>
+            {{ trans('global.list') }} {{ trans('cruds.order.title_singular') }} {{App\Models\Order::TYPE_SELECT[$type]}}
+        </h2>
     </div>
 
     <div class="card-body">
@@ -32,18 +34,22 @@
                         <th width="10">
 
                         </th>
-                        
+                        <th>
+                            {{ trans('cruds.order.fields.created_at') }}
+                        </th>
+                        @if($type == 'penambahan')
                         <th>
                             {{ trans('cruds.order.fields.order_to') }}
                         </th>
+                        @endif
                         <th>
-                            {{ trans('cruds.order.fields.type') }}
+                            {{ trans('cruds.order.fields.keterangan') }}
                         </th>
                         <th>
                             {{ trans('cruds.order.fields.ok') }}
                         </th>
                         <th>
-                            {{ trans('cruds.order.fields.keterangan') }}
+                            {{ trans('cruds.order.fields.rm') }}
                         </th>
                         <th>
                             {{ trans('cruds.order.fields.status') }}
@@ -59,18 +65,26 @@
                             <td>
 
                             </td>
-                            
+                            <td>
+                                @if(isset($order->created_at))
+                                {{ date_format($order->created_at,"Y-m-d H:i") }}
+                                @endif
+                            </td>
+                            @if($type == 'penambahan')
                             <td>
                                 {{ App\Models\Order::ORDER_TO_SELECT[$order->order_to] ?? '' }}
                             </td>
+                            @endif
                             <td>
-                                {{ App\Models\Order::TYPE_SELECT[$order->type] ?? '' }}
+                                {{ $order->keterangan }}
                             </td>
                             <td>
                                 {{ $order->ok->lokasi ?? '' }}
                             </td>
                             <td>
-                                {{ $order->keterangan ?? '' }}
+                                @foreach($order->rms as $rm)
+                                <span class="badge">{{ $rm->name ?? '' }} ({{ $rm->category->name ?? '' }}) : {{ $rm->pivot->qty }}</span><br>
+                                @endforeach
                             </td>
                             <td>
                                 {{ App\Models\Order::STATUS_SELECT[$order->status] ?? '' }}
@@ -87,11 +101,7 @@
                                         {{ trans('global.approve') }}
                                     </a>
                                 @endcan
-                                {{-- @can('order_edit')
-                                    <a class="btn btn-xs btn-info" href="{{ route('admin.orders.edit', $order->id) }}">
-                                        {{ trans('global.approve') }}
-                                    </a>
-                                @endcan --}}
+                                
                                 @can('order_delete')
                                     <form action="{{ route('admin.orders.destroy', $order->id) }}" method="POST" onsubmit="return confirm('{{ trans('global.areYouSure') }}');" style="display: inline-block;">
                                         <input type="hidden" name="_method" value="DELETE">
@@ -99,9 +109,7 @@
                                         <input type="submit" class="btn btn-xs btn-danger" value="{{ trans('global.delete') }}">
                                     </form>
                                 @endcan
-
                             </td>
-
                         </tr>
                     @endforeach
                 </tbody>
@@ -125,6 +133,10 @@
             <div class="form-check form-check-inline">
                     <input class="form-check-input" type="radio" name="order_to" id="ck" value="ck">
                     <label class="form-check-label" for="ck">Central Kitchen</label>
+            </div>
+            <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="order_to" id="inventory" value="inventory">
+                    <label class="form-check-label" for="inventory">Inventory</label>
             </div>
             <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" name="order_to" id="purchasing" value="purchasing">
@@ -200,6 +212,8 @@
   });
   @can('import')
   let table = $('.datatable-Order:not(.ajaxTable)').DataTable({ buttons: dtButtons })
+  @else
+  let table = $('.datatable-Order:not(.ajaxTable)').DataTable({ buttons: [] })
   @endcan
   $('a[data-toggle="tab"]').on('shown.bs.tab click', function(e){
       $($.fn.dataTable.tables(true)).DataTable()

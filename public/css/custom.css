@@ -142,3 +142,15 @@ table.dataTable thead .sorting_desc {
 li.c-sidebar-nav-item:hover {
     background: #f32e2e !important;
 } */
+
+.header-right {
+    position: absolute;
+    right: 0;
+    padding-right: 30px;
+    align-self: center;
+    align-items: self-end;
+}
+
+.header-right:hover {
+    cursor: pointer;
+}

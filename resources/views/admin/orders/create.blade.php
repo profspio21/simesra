@@ -3,7 +3,7 @@
 
 <div class="card">
     <div class="card-header">
-        {{ trans('global.create') }} {{ trans('cruds.order.title_singular') }}
+        <h2>{{ trans('global.create') }} {{ trans('cruds.order.title_singular') }}</h2>
     </div>
 
     <div class="card-body">
@@ -71,7 +71,7 @@
                 </div>
                 <div class="cloneable col">
                     <label for="bahan">{{ trans('cruds.rawMaterial.fields.qty') }}</label>
-                    <input class="form-control" type="number" step="1" name="qty[]" value="{{ old('qty', '') }}">
+                    <input class="form-control" type="number" step="1" min="0" name="qty[]" value="{{ old('qty', '') }}" required>
                 </div>
                 <div class="cloneable col" style="align-self: self-end;">
                     <button class="btnaction btn btn-primary add" name="add" type="button">

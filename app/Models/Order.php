@@ -12,6 +12,7 @@ class Order extends Model
 
     public const ORDER_TO_SELECT = [
         'ck'         => 'Central Kitchen',
+        'inventory'  => 'Inventory',
         'purchasing' => 'Purchasing',
     ];
 
@@ -22,6 +23,7 @@ class Order extends Model
 
     public const STATUS_SELECT = [
         'approve_reject_ck'  => 'Permohonan ke CK',
+        'approve_reject_inventory'  => 'Permohonan ke Inventory',
         'confirm_ok_om'  => 'Pengiriman',
         'approve_om'  => 'Menunggu Persetujuan Outlet Manajer',
         'approve_sa'  => 'Menunggu Persetujuan CEO',
@@ -61,7 +63,7 @@ class Order extends Model
 
     public function rms()
     {
-        return $this->belongsToMany(RawMaterial::class)->withPivot('qty','ket','approved_qty')->withTimestamps();;
+        return $this->belongsToMany(RawMaterial::class)->withPivot('qty','approved_qty','ket')->withTimestamps();;
     }
 
     protected function serializeDate(DateTimeInterface $date)

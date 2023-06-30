@@ -40,7 +40,6 @@
             <button class="c-header-toggler mfs-3 d-md-down-none" type="button" responsive="true">
                 <i class="fas fa-fw fa-bars"></i>
             </button>
-
             <ul class="c-header-nav ml-auto">
                 @if(count(config('panel.available_languages', [])) > 1)
                     <li class="c-header-nav-item dropdown d-md-down-none">
@@ -57,6 +56,40 @@
 
 
             </ul>
+            <ul class="c-header-nav ml-auto">
+                  <li class="icons dropdown">
+                      <div class="user-img c-pointer position-relative" data-toggle="dropdown">
+  
+                          <img class="text-center" style="background-image: url('{{ asset('assets/images/user.png') }}'); width: 40px;
+                             height: 40px;
+                             background-size: cover;
+                             border-radius: 100%;">
+                          {{ auth()->user()->username }}
+                      </div>
+                      <div class="drop-down dropdown-profile dropdown-menu">
+                          <div class="dropdown-content-body">
+                              <ul style="list-style-type:none; padding-inline-start: 20px;
+                              ">
+                                  <li>
+                                      <a href="{{route('profile.password.edit')}}"><i class="c-sidebar-nav-icon fas fa-fw fa-user"></i> <span>Profile</span></a>
+                                  </li>
+  
+                                  <hr class="my-2">
+                                  <li>
+                                      <a href="javascript:void" onclick="$('#logout-form').submit();">
+                                          <i class="c-sidebar-nav-icon fas fa-fw fa-sign-out-alt"></i> <span>Logout</span>
+                                      </a>
+                                      <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                          {{ csrf_field() }}
+                                      </form>
+                                  </li>
+                              </ul>
+                          </div>
+                      </div>
+                  </li>
+              </ul>
+
+            
         </header>
 
         <div class="c-body">
@@ -172,6 +205,14 @@
         }
       },
       {
+      extend: 'colvis',
+      className: 'btn-default',
+      text: colvisButtonTrans,
+      exportOptions: {
+            columns: ':visible'
+        }
+      },
+      {
         extend: 'excel',
         className: 'btn-default',
         text: excelButtonTrans,
@@ -211,14 +252,7 @@
       //     columns: ':visible'
       //   }
       // },
-      // {
-      //   extend: 'colvis',
-      //   className: 'btn-default',
-      //   text: colvisButtonTrans,
-      //   exportOptions: {
-      //     columns: ':visible'
-      //   }
-      // }
+
     ]
   });
 

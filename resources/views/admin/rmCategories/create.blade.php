@@ -18,7 +18,16 @@
                     </div>
                 @endif
                 <span class="help-block">{{ trans('cruds.rmCategory.fields.name_helper') }}</span>
+            </div>            
+            <div class="form-group">
+                <label class="required" for="type">Type</label>
+                <select class="form-control select2 {{ $errors->has('type') ? 'is-invalid' : '' }}" name="type" id="type" required>
+                    @foreach(\App\Models\Order::ORDER_TO_SELECT as $entry)
+                        <option value="{{ $entry }}" {{ old('type') == $entry ? 'selected' : '' }}>{{ $entry }}</option>
+                    @endforeach
+                </select>
             </div>
+            
             <div class="form-group">
                 <button class="btn btn-danger" type="submit">
                     {{ trans('global.save') }}
@@ -27,7 +36,5 @@
         </form>
     </div>
 </div>
-
-
 
 @endsection

@@ -69,11 +69,11 @@
                 </div>
                 <div class="cloneable col">
                     <label for="bahan">{{ trans('cruds.rawMaterial.fields.qty') }}</label>
-                    <input class="form-control" type="number" step="1" name="old_qty[]" value="{{$item->pivot->qty}}" disabled>
+                    <input class="form-control" type="number" min="0" step="1" name="qty[]" value="{{$item->pivot->qty}}" disabled>
                 </div>
                 <div class="cloneable col">
                     <label for="bahan">{{ trans('cruds.rawMaterial.fields.approved_qty') }}</label>
-                    <input class="form-control" type="number" step="1" name="qty[]" value="{{$item->pivot->qty}}" >
+                    <input class="form-control" type="number" step="1" min="0" name="approved_qty[]" value="{{$item->pivot->approved_qty ?? $item->pivot->qty}}" >
                 </div>
                 <div class="cloneable col">
                     <label for="ket">{{ trans('cruds.rawMaterial.fields.ket') }}</label>

@@ -20,13 +20,15 @@ class RawMaterialController extends Controller
 
     public function list(Request $request)
     {
-        abort_if(Gate::denies('raw_material_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        abort_if(Gate::denies('stock_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         $ok_id = $request->id;
+        
+        $ok = OutletKitchen::where('id', $ok_id)->first();
 
         $rawMaterials = OkRm::with('rm')->where('ok_id', $ok_id)->get();
 
-        return view('admin.rawMaterials.list', compact('rawMaterials', 'ok_id'));
+        return view('admin.rawMaterials.list', compact('rawMaterials', 'ok_id', 'ok'));
 
     }
 
